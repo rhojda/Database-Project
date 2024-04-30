@@ -1,13 +1,14 @@
 <h1>New Game</h1>
 
-{{#if game}}
-<div>
-    <h2>{{game.title}}</h2>
-    <input type="hidden" name="id" value="{{gameIndex}}">
-</div>
-{{/if}}
-
 <form action="/games/upsert" role="form" method="post">
+
+    {{#if game}}
+    <div>
+        <h2>{{game.title}}</h2>
+        <input type="hidden" name="id" value="{{gameIndex}}">
+    </div>
+    {{/if}}
+
     <div>
         <label for="game_name">Game Name</label>
         <input type="text" id="game_name" name="title" {{#if game}}value="{{game.title}}" {{/if}}>

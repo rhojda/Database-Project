@@ -1,9 +1,5 @@
 <h1>{{console.name}}</h1>
 
-Games in Console:
-{{#if games}}
-
-<br>
-{{#each games}}
-{{this.title}}{{#unless @last}}, {{/unless}}{{/each}}
+{{#if game}}
+<p>Written by {{game.title}} </p>
 {{/if}}

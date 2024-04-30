@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Game = require('../models/game');
-const Genre = require('../models/genre');
 
 router.get('/', function (req, res, next) {
     const games = Game.all
@@ -9,36 +8,19 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/form', async (req, res, next) => {
-    res.render('games/form', { title: 'Video Game Database || Games', genres: Genre.all });
+    res.render('games/form', { title: 'Video Game Database || Games' });
 });
 
 router.get('/edit', async (req, res, next) => {
     let gameIndex = req.query.id;
     let game = Game.get(gameIndex);
-    res.render('games/form', { title: 'Video Game Database || Games', game: game, gameIndex: gameIndex, genres: Genre.all });
-});
-
-router.get('/show/:id', async (req, res, next) => {
-    let templateVars = {
-        title: 'Video Game Database || Games',
-        game: Game.get(req.params.id)
-    }
-    if (templateVars.game.genreIds) {
-        templateVars['genres'] = templateVars.game.genreIds.map((genreIds) => Genre.get(genreIds))
-    }
-    res.render('games/show', templateVars);
+    res.render('games/form', { title: 'Video Game Database || Games', game: game, gameIndex: gameIndex });
 });
 
 router.post('/upsert', async (req, res, next) => {
-    console.log('body: ' + JSON.stringify(req.body))
+    console.log('body: ' + JSON.stringify(req.body));
     Game.upsert(req.body);
-    let createdOrupdated = req.body.id ? 'updated' : 'created';
-    req.session.flash = {
-        type: 'info',
-        intro: 'Success!',
-        message: `the game has been ${createdOrupdated}!`,
-    };
-    res.redirect(303, '/games')
+    res.redirect(303, '/games');
 });
 
 

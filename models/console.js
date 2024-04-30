@@ -1,8 +1,8 @@
 const consoles = [
-    { name: "XBOX 360", gameIds: ["0", "1"] },
-    { name: "PS5" },
-    { name: "PC" },
-    { name: "PS4" }
+    { name: "XBOX 360", gameIds: "0" },
+    { name: "PS5", },
+    { name: "PC", },
+    { name: "PS4", }
 ]
 
 exports.add = (console) => {
@@ -11,6 +11,11 @@ exports.add = (console) => {
 
 exports.get = (idx) => {
     return consoles[idx];
+}
+
+
+exports.update = (console) => {
+    consoles[console.id] = console;
 }
 
 exports.upsert = (console) => {
@@ -23,10 +28,5 @@ exports.upsert = (console) => {
         exports.add(console);
     }
 }
-
-exports.update = (console) => {
-    consoles[console.id] = console;
-}
-
 
 exports.all = consoles

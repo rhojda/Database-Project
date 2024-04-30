@@ -1,43 +1,17 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+
 const app = express()
 const port = 3000
 
 const indexRouter = require('./routes/index');
 const gamesRouter = require('./routes/games');
 const consolesRouter = require('./routes/consoles');
-const genresRouter = require('./routes/genres');
 
-const bodyParser = require('body-parser')
+//extra platform setup
 app.use(bodyParser.urlencoded({ extended: true }))
 
-const { credentials } = require('./config')
-
-const cookieParser = require('cookie-parser')
-app.use(cookieParser(credentials.cookieSecret));
-
-const expressSession = require('express-session')
-app.use(expressSession({
-    secret: credentials.cookieSecret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-}));
-
-// session configuration
-//make it possible to use flash messages, and pass them to the view
-app.use((req, res, next) => {
-    res.locals.flash = req.session.flash
-    delete req.session.flash
-    next()
-})
-
-app.use('/', indexRouter);
-app.use('/games', gamesRouter);
-app.use('/consoles', consolesRouter);
-app.use('/genres', genresRouter);
-
-
-
+// view engine setup
 var handlebars = require('express-handlebars').create({
     helpers: {
         eq: (v1, v2) => v1 == v2,
@@ -57,22 +31,19 @@ var handlebars = require('express-handlebars').create({
         dateStr: (v) => v && v.toLocaleDateString("en-US")
     }
 });
-
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+app.use('/', indexRouter);
+app.use('/games', gamesRouter);
+app.use('/consoles', consolesRouter);
 
-/* GET home page. */
-app.use('/', function (req, res, next) {
-    res.send("<h1>Database</h1>");
-});
 
 // custom 404 page
 app.use((req, res) => {
     res.status(404)
     res.send('<h1>404 - Not Found</h1>')
 })
-
 
 // custom 500 page
 app.use((err, req, res, next) => {
