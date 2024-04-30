@@ -1,0 +1,9 @@
+<h1>{{game.title}}</h1>
+
+Genre:
+
+{{#if genres}}
+<br>
+{{#each genres}}
+{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/if}}

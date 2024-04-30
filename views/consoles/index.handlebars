@@ -1,7 +1,10 @@
 <h1>Consoles</h1>
 
-<ul>
-    {{#each consoles}}
-    <li>{{this}}</li>
-    {{/each}}
-</ul>
+<a href="/consoles/form">Add a new Console</a>
+
+{{#each consoles}}
+<li>
+    <a href="/consoles/show/{{@index}}">{{@index}} - {{this.name}}</a>
+    <a href="/consoles/edit?id={{@index}}">Edit</a>
+</li>
+{{/each}}

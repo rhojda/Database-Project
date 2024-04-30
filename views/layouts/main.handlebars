@@ -6,7 +6,21 @@
 </head>
 
 <body>
+    {{#if flash}}
+    <div>
+        <strong>{{flash.intro}}</strong> {{{flash.message}}}
+    </div>
+    {{/if}}
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/consoles">Consoles</a></li>
+        </ul>
+    </nav>
     {{{body}}}
 </body>
+
 
 </html>

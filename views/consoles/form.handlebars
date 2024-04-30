@@ -1,0 +1,27 @@
+<h1>New Console</h1>
+
+{{#if console}}
+<div>
+    <h2>{{console.name}}</h2>
+    <input type="hidden" name="id" value="{{consoleIndex}}">
+</div>
+{{/if}}
+
+<form action="/consoles/upsert" role="form" method="post">
+    <div>
+        <label for="console_name">Console Name</label>
+        <input type="text" id="console_name" name="name" {{#if console}}value="{{console.name}}" {{/if}}>
+    </div>
+    <div>
+        <label for="gameId">Game</label>
+        <select name="gameId" multiple id="gameId">
+            <option disabled selected value>-- select Game --</option>
+            {{#each games}}
+            <option value="{{@index}}" {{#if (and @root.console (eq @root.console.gameId @index))}}selected{{/if}}>
+                {{this.title}}
+            </option>
+            {{/each}}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

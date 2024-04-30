@@ -1,6 +1,10 @@
 <h1>Games</h1>
-<ul>
-    {{#each games}}
-    <li>{{this}}</li>
-    {{/each}}
-</ul>
+
+<a href="/games/form">Add a new Game</a>
+
+{{#each games}}
+<li>
+    <a href="/games/show/{{@index}}">{{@index}} - {{this.title}}</a>
+    <a href="/games/edit?id={{@index}}">Edit</a>
+</li>
+{{/each}}

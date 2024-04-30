@@ -2,8 +2,18 @@
   "name": "Database",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "start": "node ./v_db.js",
+    "dev": "nodemon ./v_db.js"
+  },
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
-    "express-handlebars": "^7.1.2"
+    "express-handlebars": "^7.1.2",
+    "express-session": "^1.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

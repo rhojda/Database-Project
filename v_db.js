@@ -5,15 +5,62 @@ const port = 3000
 const indexRouter = require('./routes/index');
 const gamesRouter = require('./routes/games');
 const consolesRouter = require('./routes/consoles');
+const genresRouter = require('./routes/genres');
 
-var handlebars = require('express-handlebars').create();
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true }))
+
+const { credentials } = require('./config')
+
+const cookieParser = require('cookie-parser')
+app.use(cookieParser(credentials.cookieSecret));
+
+const expressSession = require('express-session')
+app.use(expressSession({
+    secret: credentials.cookieSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}));
+
+// session configuration
+//make it possible to use flash messages, and pass them to the view
+app.use((req, res, next) => {
+    res.locals.flash = req.session.flash
+    delete req.session.flash
+    next()
+})
 
 app.use('/', indexRouter);
 app.use('/games', gamesRouter);
 app.use('/consoles', consolesRouter);
+app.use('/genres', genresRouter);
+
+
+
+var handlebars = require('express-handlebars').create({
+    helpers: {
+        eq: (v1, v2) => v1 == v2,
+        ne: (v1, v2) => v1 != v2,
+        lt: (v1, v2) => v1 < v2,
+        gt: (v1, v2) => v1 > v2,
+        lte: (v1, v2) => v1 <= v2,
+        gte: (v1, v2) => v1 >= v2,
+        and() {
+            return Array.prototype.every.call(arguments, Boolean);
+        },
+        or() {
+            return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+        },
+        someId: (arr, id) => arr && arr.some(obj => obj.id == id),
+        in: (arr, obj) => arr && arr.some(val => val == obj),
+        dateStr: (v) => v && v.toLocaleDateString("en-US")
+    }
+});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+
 
 /* GET home page. */
 app.use('/', function (req, res, next) {
