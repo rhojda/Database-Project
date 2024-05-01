@@ -3,3 +3,4 @@ module.exports = {
     "postgres": {
         "connectionString": process.env.DBCONNECTIONSTRING
     }
+}
