@@ -7,9 +7,35 @@ const port = 3000
 const indexRouter = require('./routes/index');
 const gamesRouter = require('./routes/games');
 const consolesRouter = require('./routes/consoles');
+const usersRouter = require('./routes/users');
+
+const { credentials } = require('./config')
+const cookieParser = require('cookie-parser')
+
+const expressSession = require('express-session')
 
 //extra platform setup
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(cookieParser(credentials.cookieSecret));
+
+app.use(expressSession({
+    secret: credentials.cookieSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}));
+
+app.use((req, res, next) => {
+    res.locals.flash = req.session.flash
+    delete req.session.flash
+    next()
+})
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.session.currentUser
+    next()
+})
 
 // view engine setup
 var handlebars = require('express-handlebars').create({
@@ -31,12 +57,14 @@ var handlebars = require('express-handlebars').create({
         dateStr: (v) => v && v.toLocaleDateString("en-US")
     }
 });
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use('/', indexRouter);
 app.use('/games', gamesRouter);
 app.use('/consoles', consolesRouter);
+app.use('/users', usersRouter);
 
 
 // custom 404 page
