@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../models/game');
 
-router.get('/', function (req, res, next) {
-    const games = Game.all
+router.get('/', async (req, res, next) => {
+    let games = await Game.all();
     res.render('games/index', { title: 'Video Game Database || Games', games: games });
 });
 

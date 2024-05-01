@@ -14,6 +14,8 @@ const cookieParser = require('cookie-parser')
 
 const expressSession = require('express-session')
 
+const csrf = require('csurf')
+
 //extra platform setup
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -37,6 +39,13 @@ app.use((req, res, next) => {
     next()
 })
 
+// this must come after we link in body-parser,
+// cookie-parser, and express-session
+app.use(csrf({ cookie: true }))
+app.use((req, res, next) => {
+    res.locals._csrfToken = req.csrfToken()
+    next()
+})
 // view engine setup
 var handlebars = require('express-handlebars').create({
     helpers: {

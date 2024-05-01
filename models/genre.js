@@ -1,7 +1,17 @@
+const db = require('../database')
+
+/*
 const genres = [
     { name: "Fantasy" },
     { name: "Adventure" },
 ]
+*/
+
+exports.all = async () => {
+    const { rows } = await db.getPool().query("select * from genres order by id");
+    return db.camelize(rows);
+}
+
 exports.add = (genre) => {
     genres.push(genre);
 }
@@ -22,4 +32,6 @@ exports.update = (genre) => {
     genres[genre.id] = genre;
 }
 
+/*
 exports.all = genres
+*/

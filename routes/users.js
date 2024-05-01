@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const helpers = require('./helpers')
 
 router.get('/register', async (req, res, next) => {
+    if (helpers.isLoggedIn(req, res)) {
+        return
+    }
     res.render('users/register', { title: 'Video Game Database || Registration' });
 });
 
+
+
 router.post('/register', async (req, res, next) => {
+    if (helpers.isLoggedIn(req, res)) {
+        return
+    }
     console.log('body: ' + JSON.stringify(req.body));
     const user = User.getByEmail(req.body.email)
     if (user) {
@@ -31,10 +40,16 @@ router.post('/register', async (req, res, next) => {
 
 
 router.get('/login', async (req, res, next) => {
+    if (helpers.isLoggedIn(req, res)) {
+        return
+    }
     res.render('users/login', { title: 'Video Game Database || Login' });
 });
 
 router.post('/login', async (req, res, next) => {
+    if (helpers.isLoggedIn(req, res)) {
+        return
+    }
     console.log('body: ' + JSON.stringify(req.body));
     const user = User.login(req.body)
     if (user) {

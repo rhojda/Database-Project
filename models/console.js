@@ -1,9 +1,18 @@
+const db = require('../database')
+
+/*
 const consoles = [
     { name: "XBOX 360", gameIds: "0" },
     { name: "PS5", },
     { name: "PC", },
     { name: "PS4", }
 ]
+*/
+
+exports.all = async () => {
+    const { rows } = await db.getPool().query("select * from consoles order by id");
+    return db.camelize(rows);
+}
 
 exports.add = (console) => {
     consoles.push(console);
@@ -29,4 +38,6 @@ exports.upsert = (console) => {
     }
 }
 
+/*
 exports.all = consoles
+*/

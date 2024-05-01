@@ -3,10 +3,11 @@ const Console = require('../models/console');
 const Game = require('../models/game');
 const router = express.Router();
 
-router.get('/', function (req, res, next) {
-    const consoles = Console.all
+router.get('/', async (req, res, next) => {
+    let consoles = await Console.all();
     res.render('consoles/index', { title: 'Video Game Database || Consoles', consoles: consoles });
 });
+
 
 router.get('/form', async (req, res, next) => {
     res.render('consoles/form', { title: 'Video Game Database || Consoles', games: Game.all });
