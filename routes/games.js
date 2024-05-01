@@ -18,9 +18,15 @@ router.get('/edit', async (req, res, next) => {
 });
 
 router.post('/upsert', async (req, res, next) => {
-    console.log('body: ' + JSON.stringify(req.body));
+    console.log('body: ' + JSON.stringify(req.body))
     Game.upsert(req.body);
-    res.redirect(303, '/games');
+    let createdOrupdated = req.body.id ? 'updated' : 'created';
+    req.session.flash = {
+        type: 'info',
+        intro: 'Success!',
+        message: `the game has been ${createdOrupdated}!`,
+    };
+    res.redirect(303, '/games')
 });
 
 

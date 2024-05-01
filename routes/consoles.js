@@ -31,10 +31,17 @@ router.get('/show/:id', async (req, res, next) => {
 });
 
 router.post('/upsert', async (req, res, next) => {
-    console.log('body: ' + JSON.stringify(req.body));
+    console.log('body: ' + JSON.stringify(req.body))
     Console.upsert(req.body);
-    res.redirect(303, '/consoles');
+    let createdOrupdated = req.body.id ? 'updated' : 'created';
+    req.session.flash = {
+        type: 'info',
+        intro: 'Success!',
+        message: `the console has been ${createdOrupdated}!`,
+    };
+    res.redirect(303, '/consoles')
 });
+
 
 
 module.exports = router;
