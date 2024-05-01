@@ -1,34 +1,20 @@
 const express = require('express');
 const Console = require('../models/console');
-const Game = require('../models/game');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-    let consoles = await Console.all();
+    const consoles = await Console.all();
     res.render('consoles/index', { title: 'Video Game Database || Consoles', consoles: consoles });
 });
 
-
 router.get('/form', async (req, res, next) => {
-    res.render('consoles/form', { title: 'Video Game Database || Consoles', games: Game.all });
+    res.render('consoles/form', { title: 'Video Game Database || Consoles' });
 });
 
 router.get('/edit', async (req, res, next) => {
-    let consoleIndex = req.query.id;
-    let console = Console.get(consoleIndex);
-    res.render('consoles/form', { title: 'Video Game Database || Consoles', console: console, consoleIndex: consoleIndex, games: Game.all });
-});
-
-
-router.get('/show/:id', async (req, res, next) => {
-    let templateVars = {
-        title: 'Video Game Database || Consoles',
-        console: Console.get(req.params.id)
-    }
-    if (templateVars.console.gameIds) {
-        templateVars['game'] = Game.get(templateVars.console.gameIds);
-    }
-    res.render('consoles/show', templateVars);
+    let consoleId = req.query.id;
+    let console = await Console.get(consoleId);
+    res.render('consoles/form', { title: 'Video Game Database || Consoles', console: console });
 });
 
 router.post('/upsert', async (req, res, next) => {
@@ -42,7 +28,5 @@ router.post('/upsert', async (req, res, next) => {
     };
     res.redirect(303, '/consoles')
 });
-
-
 
 module.exports = router;

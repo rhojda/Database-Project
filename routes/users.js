@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const UserConsole = require('../models/user_console');
 const helpers = require('./helpers')
 
 router.get('/register', async (req, res, next) => {
@@ -10,14 +11,12 @@ router.get('/register', async (req, res, next) => {
     res.render('users/register', { title: 'Video Game Database || Registration' });
 });
 
-
-
 router.post('/register', async (req, res, next) => {
     if (helpers.isLoggedIn(req, res)) {
         return
     }
     console.log('body: ' + JSON.stringify(req.body));
-    const user = User.getByEmail(req.body.email)
+    const user = await User.getByEmail(req.body.email)
     if (user) {
         res.render('users/register', {
             title: 'Video Game Database || Login',
@@ -28,7 +27,7 @@ router.post('/register', async (req, res, next) => {
             }
         });
     } else {
-        User.add(req.body);
+        await User.add(req.body);
         req.session.flash = {
             type: 'info',
             intro: 'Success!',
@@ -47,11 +46,11 @@ router.get('/login', async (req, res, next) => {
 });
 
 router.post('/login', async (req, res, next) => {
+    console.log('body: ' + JSON.stringify(req.body));
     if (helpers.isLoggedIn(req, res)) {
         return
     }
-    console.log('body: ' + JSON.stringify(req.body));
-    const user = User.login(req.body)
+    const user = await User.login(req.body)
     if (user) {
         req.session.currentUser = user
         req.session.flash = {
@@ -81,6 +80,16 @@ router.post('/logout', async (req, res, next) => {
     };
     res.redirect(303, '/');
 });
+
+router.get('/profile', async (req, res, next) => {
+    if (helpers.isNotLoggedIn(req, res)) {
+        return
+    }
+    const userConsole = await UserConsole.allForUser(req.session.currentUser);
+    res.render('users/profile', { title: 'Video Game Database || Profile', user: req.session.currentUser, userConsole: userConsole });
+});
+
+
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-<h1>New Game</h1>
+<h1>Add New Game</h1>
 
 <form action="/games/upsert" role="form" method="post">
     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
@@ -6,18 +6,15 @@
     {{#if game}}
     <div>
         <h2>{{game.title}}</h2>
-        <input type="hidden" name="id" value="{{gameIndex}}">
+        <input type="hidden" name="id" value="{{game.id}}">
     </div>
     {{/if}}
 
     <div>
-        <label for="game_name">Game Name</label>
-        <input type="text" id="game_name" name="title" {{#if game}}value="{{game.title}}" {{/if}}>
+        <label for="game">Game</label>
+        <input type="text" id="game" name="title" {{#if game}}value="{{game.title}}" {{/if}}>
     </div>
-    <div>
-        <label for="developer">Developer</label>
-        <input type="text" id="developer" name="developer" {{#if game}}value="{{game.developer}}" {{/if}}>
-    </div>
+
     <div>
         <label for="genreId">Genre</label>
         <select name="genreId" id="genreId">

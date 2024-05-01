@@ -1,0 +1,1 @@
+insert into games (title) values ('Destiny 2')

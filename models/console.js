@@ -1,43 +1,34 @@
 const db = require('../database')
 
-/*
-const consoles = [
-    { name: "XBOX 360", gameIds: "0" },
-    { name: "PS5", },
-    { name: "PC", },
-    { name: "PS4", }
-]
-*/
-
 exports.all = async () => {
     const { rows } = await db.getPool().query("select * from consoles order by id");
     return db.camelize(rows);
 }
 
-exports.add = (console) => {
-    consoles.push(console);
+exports.add = async (console) => {
+    return db.getPool()
+        .query("INSERT INTO consoles(name) VALUES($1) RETURNING *",
+            [console.name]);
 }
 
-exports.get = (idx) => {
-    return consoles[idx];
+exports.get = async (id) => {
+    const { rows } = await db.getPool().query("select * from consoles where id = $1", [id])
+    return db.camelize(rows)[0]
 }
 
-
-exports.update = (console) => {
-    consoles[console.id] = console;
+exports.update = async (console) => {
+    return await db.getPool()
+        .query("UPDATE consoles SET name = $1 where id = $2 RETURNING *",
+            [console.name, console.id]);
 }
 
-exports.upsert = (console) => {
-    if (console.gameIds && !Array.isArray(console.gameIds)) {
-        console.gameIds = [console.gameIds];
-    }
+exports.upsert = async (console) => {
     if (console.id) {
-        exports.update(console);
+        return exports.update(console);
     } else {
-        exports.add(console);
+        return exports.add(console);
     }
 }
 
-/*
-exports.all = consoles
-*/
+
+

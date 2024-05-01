@@ -3,7 +3,7 @@ const router = express.Router();
 const Game = require('../models/game');
 
 router.get('/', async (req, res, next) => {
-    let games = await Game.all();
+    const games = await Game.all();
     res.render('games/index', { title: 'Video Game Database || Games', games: games });
 });
 
@@ -12,13 +12,13 @@ router.get('/form', async (req, res, next) => {
 });
 
 router.get('/edit', async (req, res, next) => {
-    let gameIndex = req.query.id;
-    let game = Game.get(gameIndex);
-    res.render('games/form', { title: 'Video Game Database || Games', game: game, gameIndex: gameIndex });
+    let gameId = req.query.id;
+    let game = await Game.get(gameId);
+    res.render('games/form', { title: 'Video Game Database || Games', game: game });
 });
 
 router.post('/upsert', async (req, res, next) => {
-    console.log('body: ' + JSON.stringify(req.body))
+    console.log('body: ' + JSON.stringify(req.body));
     Game.upsert(req.body);
     let createdOrupdated = req.body.id ? 'updated' : 'created';
     req.session.flash = {
@@ -26,7 +26,7 @@ router.post('/upsert', async (req, res, next) => {
         intro: 'Success!',
         message: `the game has been ${createdOrupdated}!`,
     };
-    res.redirect(303, '/games')
+    res.redirect(303, '/games');
 });
 
 

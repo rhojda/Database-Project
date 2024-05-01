@@ -4,7 +4,7 @@
 
 {{#each consoles}}
 <li>
-    <a href="/consoles/show/{{@index}}">{{@index}} - {{this.name}}</a>
-    <a href="/consoles/edit?id={{@index}}">Edit</a>
+    {{this.id}} - {{this.name}}</a>
+    <a href="/consoles/edit?id={{this.id}}">Edit</a>
 </li>
 {{/each}}

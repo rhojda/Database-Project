@@ -1,0 +1,9 @@
+<h1>{{currentUser.name}}</h1>
+
+My Consoles:
+
+<ul>
+    {{#each userConsole}}
+    <li>{{this.title}} -- {{this.readStatus}}</li>
+    {{/each}}
+</ul>

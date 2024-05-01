@@ -1,32 +1,37 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
+const csrf = require('csurf')
 
-const app = express()
-const port = 3000
+const { credentials } = require('./config')
 
 const indexRouter = require('./routes/index');
 const gamesRouter = require('./routes/games');
 const consolesRouter = require('./routes/consoles');
 const usersRouter = require('./routes/users');
+const genresRouter = require('./routes/genres');
 
-const { credentials } = require('./config')
-const cookieParser = require('cookie-parser')
+const app = express()
+const port = 3000
 
-const expressSession = require('express-session')
-
-const csrf = require('csurf')
+const path = require('path');
 
 //extra platform setup
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(cookieParser(credentials.cookieSecret));
-
 app.use(expressSession({
     secret: credentials.cookieSecret,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
+
+app.use(csrf({ cookie: true }))
+app.use((req, res, next) => {
+    res.locals._csrfToken = req.csrfToken()
+    next()
+})
 
 app.use((req, res, next) => {
     res.locals.flash = req.session.flash
@@ -41,11 +46,11 @@ app.use((req, res, next) => {
 
 // this must come after we link in body-parser,
 // cookie-parser, and express-session
-app.use(csrf({ cookie: true }))
-app.use((req, res, next) => {
-    res.locals._csrfToken = req.csrfToken()
-    next()
-})
+
+
+// adding routes for bootstrap
+app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')))
+
 // view engine setup
 var handlebars = require('express-handlebars').create({
     helpers: {
@@ -74,6 +79,7 @@ app.use('/', indexRouter);
 app.use('/games', gamesRouter);
 app.use('/consoles', consolesRouter);
 app.use('/users', usersRouter);
+app.use('/genres', genresRouter);
 
 
 // custom 404 page
