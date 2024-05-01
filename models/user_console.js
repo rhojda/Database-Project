@@ -8,6 +8,12 @@ exports.add = async (userConsole) => {
             [userConsole.consoleId, userConsole.userId]);
 }
 
+exports.update = async (userConsole) => {
+    return await db.getPool()
+        .query("UPDATE users_consoles where id = $1 RETURNING *",
+            [userConsole.id]);
+}
+
 exports.upsert = (userConsole) => {
     if (userConsole.id) {
         return exports.update(userConsole);
@@ -18,19 +24,19 @@ exports.upsert = (userConsole) => {
 
 exports.get = async (console, user) => {
     const { rows } = await db.getPool().query(`
-      select *
-      from users_consoles
-      where console_id = $1 and user_id = $2`,
+    select *
+    from users_consoles
+    where console_id = $1 and user_id = $2`,
         [console.id, user.id])
     return db.camelize(rows)[0]
 }
 
-exports.allForUser = async (user) => {
+exports.AllForUser = async (user) => {
     const { rows } = await db.getPool().query(`
-      select consoles.name
-      from users_consoles
-      join consoles on consoles.id = users_consoles.console_id
-      where user_id = $1;`,
+    select consoles.name
+    from users_consoles
+    join consoles on consoles.id = user_consoles.console_id
+    where user_id = $1;`,
         [user.id]);
     return db.camelize(rows);
 }

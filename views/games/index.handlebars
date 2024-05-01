@@ -4,7 +4,7 @@
 
 {{#each games}}
 <li>
-    <a href="/games/show/{{@index}}">{{@index}} - {{this.title}}</a>
-    <a href="/games/edit?id={{@index}}">Edit</a>
+    <a href="/games/show/{{this.id}}">{{this.title}}</a>
+    <a href="/games/edit?id={{this.id}}">Edit</a>
 </li>
 {{/each}}

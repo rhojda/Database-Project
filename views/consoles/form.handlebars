@@ -1,17 +1,39 @@
-<h1>Add a New Console</h1>
+<div>
+    <h1>Add a New Console</h1>
+</div>
+
+<br>
 
 <form action="/consoles/upsert" role="form" method="post">
     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
 
     {{#if console}}
     <div>
-        <h2>{{console.name}} </h2>
+        <h2>Current Name - {{console.name}} </h2>
         <input type="hidden" name="id" value="{{console.id}}">
     </div>
     {{/if}}
+
+    <br>
+
     <div>
-        <label for="title">Console Name</label>
+        <label for="title">Edit Console Name</label>
         <input type="text" id="title" name="name" {{#if console}}value="{{console.name}}" {{/if}}>
     </div>
+    <br>
+
+    <div>
+        <label for="game_id">Add a Game</label>
+        <select name="gameId" multiple id="game_id">
+            <option disabled value>-- select Game --</option>
+            {{#each games}}
+            <option value="{{this.id}}" {{#if (and @root.console (eq @root.console.gameId this.id))}}selected{{/if}}>
+                {{this.title}}
+            </option>
+            {{/each}}
+        </select>
+    </div>
+
+    <br>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

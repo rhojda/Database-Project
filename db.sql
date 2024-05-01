@@ -31,7 +31,7 @@ CREATE TABLE user_console (
   user_id integer,
   console_id integer,
   PRIMARY KEY (id),
-  CONSTRAINT FK_user_consoles
+  CONSTRAINT FK_users_console
     FOREIGN KEY (console_id)
       REFERENCES consoles(id),
   CONSTRAINT FK_users_console
@@ -44,7 +44,7 @@ CREATE INDEX user_console_fk_index ON  user_console (user_id, console_id);
 CREATE TABLE games (
   id serial,
   title varchar,
-  genre_id integer,
+  genre_id bigint,
   release_date integer,
   developer varchar,
   rating integer,

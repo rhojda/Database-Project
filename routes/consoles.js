@@ -1,5 +1,7 @@
 const express = require('express');
 const Console = require('../models/console');
+const Game = require('../models/game');
+const UserConsole = require('../models/user_console');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -8,13 +10,13 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/form', async (req, res, next) => {
-    res.render('consoles/form', { title: 'Video Game Database || Consoles' });
+    res.render('consoles/form', { title: 'Video Game Database || Consoles', games: await Game.all() });
 });
 
 router.get('/edit', async (req, res, next) => {
     let consoleId = req.query.id;
     let console = await Console.get(consoleId);
-    res.render('consoles/form', { title: 'Video Game Database || Consoles', console: console });
+    res.render('consoles/form', { title: 'Video Game Database || Consoles', console: console, games: await Game.all() });
 });
 
 router.post('/upsert', async (req, res, next) => {

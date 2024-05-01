@@ -1,15 +1,13 @@
 const db = require('../database')
 
-/*
-const genres = [
-    { name: "Fantasy" },
-    { name: "Adventure" },
-]
-*/
-
 exports.all = async () => {
     const { rows } = await db.getPool().query("select * from genres order by id");
     return db.camelize(rows);
+}
+
+exports.add = async (genre) => {
+    return db.getPool()
+        .query("INSERT INTO genres(name) VALUES($1) RETURNING *", [genre.name]);
 }
 
 exports.get = async (id) => {
@@ -17,41 +15,17 @@ exports.get = async (id) => {
     return db.camelize(rows)[0]
 }
 
-exports.create = async (name) => {
-    return db.getPool().query("INSERT INTO genres(name) VALUES($1) RETURNING *", [name]);
-}
-
-exports.update = async (id, name) => {
-    return db.getPool().query("UPDATE genres SET name = $1 where id = $2 RETURNING *", [name, id]);
+exports.update = async (genre) => {
+    return await db.getPool()
+        .query("UPDATE genres SET name = $1 where id = $2 RETURNING *",
+            [genre.name, genre.id]);
 }
 
 exports.upsert = async (genre) => {
     if (genre.id) {
-        return exports.update(genre.id, genre.name)
-    }
-    return exports.create(genre.name)
-}
-
-/*
-exports.add = (genre) => {
-    genres.push(genre);
-}
-
-exports.get = (idx) => {
-    return genres[idx];
-}
-
-exports.upsert = (genre) => {
-    if (genre.id) {
-        exports.update(genre);
+        return exports.update(genre);
     } else {
-        exports.add(genre);
+        return exports.add(genre);
     }
 }
 
-exports.update = (genre) => {
-    genres[genre.id] = genre;
-}
-
-exports.all = genres
-*/

@@ -1,8 +1,9 @@
 <h1>Add New Game</h1>
 
+<br>
+
 <form action="/games/upsert" role="form" method="post">
     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-
     {{#if game}}
     <div>
         <h2>{{game.title}}</h2>
@@ -16,15 +17,36 @@
     </div>
 
     <div>
+        <label for="dev">Developer</label>
+        <input type="text" id="dev" name="developer" {{#if game}}value="{{game.developer}}" {{/if}}>
+    </div>
+
+    <div>
+        <label for="developer">Rating</label>
+        <input type="number" step="1" placeholder="No Rating Yet" id="rating" name="rating" {{#if
+            rating}}value="{{game.rating}}" {{/if}}>
+    </div>
+
+    <div>
+        <label for="release_date">Release Date</label>
+        <input type="number" step="1" placeholder="2024" id="release_date" name="releaseDate" {{#if
+            game}}value="{{game.releaseDate}}" {{/if}}>
+    </div>
+
+
+    <div>
         <label for="genreId">Genre</label>
         <select name="genreId" id="genreId">
-            <option disabled selected value>-- select Genre --</option>
+            <option disabled value>-- select Genre --</option>
             {{#each genres}}
-            <option value="{{@index}}" {{#if (and @root.game (eq @root.game.genreId @index))}}selected{{/if}}>
+            <option value="{{this.id}}" {{#if (and @root.game (eq @root.game.genreId this.id))}}selected{{/if}}>
                 {{this.name}}
             </option>
             {{/each}}
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<br>
+<button type="submit" class="btn btn-primary">Submit</button>
 </form>

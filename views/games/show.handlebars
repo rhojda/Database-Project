@@ -1,9 +1,46 @@
-<h1>{{game.title}}</h1>
+<div class="container" style="display: flex;">
+    <div style="display: flex;">
+        <img src="https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg" alt="alternatetext">
+    </div>
 
-Genre:
+    <div class="container">
+        <div>
+            <h1>{{game.title}}</h1>
+        </div>
 
-{{#if genres}}
-<br>
-{{#each genres}}
-{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}
-{{/if}}
+
+
+
+        <div>
+            {{#if genre}}
+            <p>
+                Genre: {{genre.name}}
+            </p>
+            {{/if}}
+        </div>
+
+        <div>
+            <p>
+                Developer: {{game.developer}}
+            </p>
+        </div>
+
+
+
+        <p>
+            Release Date: {{game.releaseDate}}
+        </p>
+
+        <br>
+        <br>
+        <p>
+            Description:
+        </p>
+
+        <p>
+            Your Rating: {{game.rating}}
+        </p>
+    </div>
+
+
+</div>

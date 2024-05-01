@@ -1,2 +1,17 @@
 <h1>{{title}}</h1>
-<p>Welcome to your Database</p>
+
+{{#if currentUser}}
+<div>
+    <p>Welcome to your Video Game Database</p>
+</div>
+<div style="color:white;text-align:center;border: 15px solid white;padding: 50px;margin: 20px">
+    <button type="submit" class="btn btn-primary">
+        <a href="/consoles" style="color:white;">Browse your Consoles</a>
+    </button>
+</div>
+<div style=" color:white;text-align:center;border: 15px solid white;padding: 50px;margin: 20px">
+    <button type="submit" class="btn btn-primary">
+        <a href="/games" style="color:white;">Browse your Games</a>
+    </button>
+</div>
+{{/if}}
